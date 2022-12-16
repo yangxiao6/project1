@@ -26,15 +26,15 @@ class OperateXlsx:
     def visit_poi_name(self, row_num):
         return self.ws[f'{self.poi_name_column}{row_num}'].value
 
-# 访问参考围栏, 如参考围栏为None, 访问参考位置
+    # 访问参考围栏, 如参考围栏为None, 访问参考位置
     def visit_reference_point_or_fence(self, row_num):
         fence_value = self.ws[f'{self.reference_fence_column}{row_num}'].value
-        if fence_value == r'\N':
+        if fence_value is not None:
             return fence_value
         else:
             return self.ws[f'{self.reference_point_column}{row_num}'].value
 
-# 写入'正确围栏'数据
+    # 写入'正确围栏'数据
     def write_correct_reference(self, row_num, correct_reference_data):
         self.ws[f'{self.correct_fence_column}{row_num}'] = correct_reference_data
         self.wb.save(self.xlsx_address)
@@ -51,7 +51,8 @@ def draw_pic(reference_fence):
     # 5/ 点击'鼠标绘制面'
     mouse_draw_plane_ele.click()
     # 6/ 等待用户绘制图像
-    page.locator('xpath=//*[@id="iCenter"]/div[1]/div/div[1]/div/div/div/div').wait_for(timeout=1000000, state='visible')
+    page.locator('xpath=//*[@id="iCenter"]/div[1]/div/div[1]/div/div/div/div').wait_for(timeout=1000000,
+                                                                                        state='visible')
     # 7/ 获取 用户绘制图像产生的数据
     input_content = page.eval_on_selector('xpath=//*[@id="wkt"]', "(element) => element.value")
     return input_content
