@@ -6,7 +6,7 @@ import openpyxl
 import requests
 
 
-# xlsx基础操作 用一个类, 不同的表格操作设计为不同的类方法
+# xlsx基础操作
 class OperateXlsx:
     def __init__(self):
 
@@ -26,6 +26,7 @@ class OperateXlsx:
     def visit_poi_name(self, row_num):
         return self.ws[f'{self.poi_name_column}{row_num}'].value
 
+# 访问参考围栏, 如参考围栏为None, 访问参考位置
     def visit_reference_point_or_fence(self, row_num):
         fence_value = self.ws[f'{self.reference_fence_column}{row_num}'].value
         if fence_value is not None:
@@ -33,12 +34,13 @@ class OperateXlsx:
         else:
             return self.ws[f'{self.reference_point_column}{row_num}'].value
 
+# 写入'正确围栏'数据
     def write_correct_reference(self, row_num, correct_reference_data):
         self.ws[f'{self.correct_fence_column}{row_num}'] = correct_reference_data
         self.wb.save(self.xlsx_address)
 
 
-# 画图工具 用一个类, 不同的
+# 画图工具
 def draw_pic(reference_fence):
     # 2/ tool地址栏清空内容
     input_ele.fill('')
@@ -55,31 +57,12 @@ def draw_pic(reference_fence):
     return input_content
 
 
-wb = openpyxl.load_workbook('算法挖掘数据样本8-王二-00-00.xlsx')               # workbook,工作簿
+wb = openpyxl.load_workbook('算法挖掘数据样本8-王二-00-00.xlsx')     # workbook,工作簿
 ws = wb['王二']                                                   # worksheet,工作表
 poiid_column = 'a'                                               # poiid所在列
 reference_point_column = 'e'                                     # 参考位置所在列
 reference_fence_column = 'f'                                     # 参考围栏所在列
 query_row = '21'                                                 # 查询的行数
-
-
-# 百度地图url
-def 获取带市区的aoi名字(poi_id):
-    URL = 'https://restapi.amap.com/v5/place/detail?parameters'
-    params = {'key': '66c3cd09c85e728fc3f769cbd05e63c0', 'id': poi_id}
-    HTML = requests.get(url=URL, params=params)
-    数据 = HTML.json()
-    if 数据['pois']:
-        名字 = 数据['pois'][0]['name']
-        城市 = 数据['pois'][0]['cityname']
-        县区 = 数据['pois'][0]['adname']
-        经纬度 = 数据['pois'][0]['location']
-        带地区的aoi名字 = 城市 + 县区 + 名字
-        带地区的aoi名字 = 带地区的aoi名字.strip()
-    else:
-        带地区的aoi名字 = ''
-    return 带地区的aoi名字
-
 
 a = OperateXlsx()
 row_num_1 = int(input('起始数:\n'))
