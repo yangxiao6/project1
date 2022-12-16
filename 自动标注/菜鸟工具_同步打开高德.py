@@ -10,7 +10,7 @@ import requests
 class OperateXlsx:
     def __init__(self):
 
-        self.xlsx_address = '算法挖掘数据样本8-王二-00-00.xlsx'
+        self.xlsx_address = '算法挖掘数据样本9-王二-00-00.xlsx'
         self.sheet_name = '王二'
         self.poi_id_column = 'a'
         self.poi_name_column = 'b'
@@ -29,7 +29,7 @@ class OperateXlsx:
 # 访问参考围栏, 如参考围栏为None, 访问参考位置
     def visit_reference_point_or_fence(self, row_num):
         fence_value = self.ws[f'{self.reference_fence_column}{row_num}'].value
-        if fence_value is not None:
+        if fence_value == r'\N':
             return fence_value
         else:
             return self.ws[f'{self.reference_point_column}{row_num}'].value
@@ -56,13 +56,6 @@ def draw_pic(reference_fence):
     input_content = page.eval_on_selector('xpath=//*[@id="wkt"]', "(element) => element.value")
     return input_content
 
-
-wb = openpyxl.load_workbook('算法挖掘数据样本8-王二-00-00.xlsx')     # workbook,工作簿
-ws = wb['王二']                                                   # worksheet,工作表
-poiid_column = 'a'                                               # poiid所在列
-reference_point_column = 'e'                                     # 参考位置所在列
-reference_fence_column = 'f'                                     # 参考围栏所在列
-query_row = '21'                                                 # 查询的行数
 
 a = OperateXlsx()
 row_num_1 = int(input('起始数:\n'))
