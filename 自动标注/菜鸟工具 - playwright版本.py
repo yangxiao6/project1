@@ -1,15 +1,10 @@
-import webbrowser
-
 from playwright.sync_api import sync_playwright
-import json
 import openpyxl
-import requests
 
 
 # xlsx基础操作
 class OperateXlsx:
     def __init__(self):
-
         self.xlsx_address = '算法挖掘数据样本9-王二-00-00.xlsx'
         self.sheet_name = '王二'
         self.poi_id_column = 'a'
@@ -42,17 +37,20 @@ class OperateXlsx:
 
 # 画图工具
 def draw_pic(reference_fence):
-    # 2/ tool地址栏清空内容
+    # 1/ tool地址栏清空内容
+    input_ele = page.locator('xpath=//*[@id="wkt"]')
     input_ele.fill('')
-    # 3/ 输入'参考围栏'
+    # 2/ 输入'参考围栏'
     input_ele.fill(reference_fence)
-    # 4/ 点击' draw it'
+    # 3/ 点击' draw it'
+    draw_it_ele = page.locator('xpath=//*[@id="draw"]')
     draw_it_ele.click()
-    # 5/ 点击'鼠标绘制面'
+    # 4/ 点击'鼠标绘制面'
+    mouse_draw_plane_ele = page.locator('xpath=// *[ @ id = "polygon"]')
     mouse_draw_plane_ele.click()
-    # 6/ 等待用户绘制图像
+    # 5/ 等待用户绘制图像
     page.locator('xpath=//*[@id="iCenter"]/div[1]/div/div[1]/div/div/div/div').wait_for(timeout=1000000, state='visible')
-    # 7/ 获取 用户绘制图像产生的数据
+    # 6/ 获取 用户绘制图像产生的数据
     input_content = page.eval_on_selector('xpath=//*[@id="wkt"]', "(element) => element.value")
     return input_content
 
@@ -64,10 +62,7 @@ with sync_playwright() as p:
     # 创建一个浏览器实例
     browser = p.chromium.launch(headless=False)
     # 创建含登录状态的浏览器上下文
-    with open("baidu_state.json") as f:
-        storage_state = json.loads(f.read())
-
-    context = browser.new_context(viewport={'width': 1536, 'height': 864})
+    context = browser.new_context(viewport={'width': 1920, 'height': 1080})
 
     # 创建一个page对象
     page = context.new_page()
@@ -75,19 +70,18 @@ with sync_playwright() as p:
         try:
             # 转到页面
             page.goto('https://page.cainiao.com/cntms/cnlbs/cnlbs_visual/cnlbs_visual.html')
-
-            input_ele = page.locator('xpath=//*[@id="wkt"]')
-            draw_it_ele = page.locator('xpath=//*[@id="draw"]')
-            mouse_draw_plane_ele = page.locator('xpath=// *[ @ id = "polygon"]')
-
-            input_information = a.visit_reference_point_or_fence(row_num_1)  # 1/ 从表格中获取参考围栏信息
-            show_poi_name = a.visit_poi_name(row_num_1)  # 1.1/ 显示poi_name
+            # 打印当前行号及地址
+            show_poi_name = a.visit_poi_name(row_num_1)
             print(f'{row_num_1}, {show_poi_name}')
-            # 2/ 在画图工具中产生输出信息----------------------------------
+
+            # 1/ 从表格中获取参考围栏信息
+            input_information = a.visit_reference_point_or_fence(row_num_1)
+            # 2/ 在画图工具中产生输出信息
             output_information = draw_pic(input_information)
-            a.write_correct_reference(row_num_1, output_information)  # 3/ 把输出信息写入到表格中
-            row_num_1 += 1
-        except:
-            row_num_1 += 1
-            # 创建一个page对象
+            # 3/ 把输出信息写入到表格中
+            a.write_correct_reference(row_num_1, output_information)
+        except IOError:
+            # (如果画不出图像就直接x掉浏览器--关闭page对象,产生except，然后)创建一个新的page对象
             page = context.new_page()
+
+        row_num_1 += 1
