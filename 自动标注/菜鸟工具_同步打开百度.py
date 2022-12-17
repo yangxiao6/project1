@@ -10,7 +10,7 @@ import requests
 class OperateXlsx:
     def __init__(self):
 
-        self.xlsx_address = '算法挖掘数据样本8-王二-00-00.xlsx'
+        self.xlsx_address = '算法挖掘数据样本9-王二-00-00.xlsx'
         self.sheet_name = '王二'
         self.poi_id_column = 'a'
         self.poi_name_column = 'b'
@@ -58,14 +58,6 @@ def draw_pic(reference_fence):
     return input_content
 
 
-wb = openpyxl.load_workbook('算法挖掘数据样本8-王二-00-00.xlsx')               # workbook,工作簿
-ws = wb['王二']                                                   # worksheet,工作表
-poiid_column = 'a'                                               # poiid所在列
-reference_point_column = 'e'                                     # 参考位置所在列
-reference_fence_column = 'f'                                     # 参考围栏所在列
-query_row = '21'                                                 # 查询的行数
-
-
 # 百度地图url
 def 获取带市区的aoi名字(poi_id):
     URL = 'https://restapi.amap.com/v5/place/detail?parameters'
@@ -91,9 +83,6 @@ with sync_playwright() as p:
     # 创建一个浏览器实例
     browser = p.chromium.launch(headless=False)
     # 创建含登录状态的浏览器上下文
-    with open("baidu_state.json") as f:
-        storage_state = json.loads(f.read())
-    context1 = browser.new_context(storage_state=storage_state)
     context = browser.new_context(viewport={'width': 1536, 'height': 864})
 
     # 创建一个page对象

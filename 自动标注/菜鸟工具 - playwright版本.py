@@ -66,7 +66,7 @@ with sync_playwright() as p:
     # 创建含登录状态的浏览器上下文
     with open("baidu_state.json") as f:
         storage_state = json.loads(f.read())
-    context1 = browser.new_context(storage_state=storage_state)
+
     context = browser.new_context(viewport={'width': 1536, 'height': 864})
 
     # 创建一个page对象
