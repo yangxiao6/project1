@@ -80,7 +80,7 @@ with sync_playwright() as p:
             output_information = draw_pic(input_information)
             # 3/ 把输出信息写入到表格中
             a.write_correct_reference(row_num_1, output_information)
-        except IOError:
+        except:
             # (如果画不出图像就直接x掉浏览器--关闭page对象,产生except，然后)创建一个新的page对象
             page = context.new_page()
 
