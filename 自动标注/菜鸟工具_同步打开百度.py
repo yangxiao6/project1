@@ -10,7 +10,7 @@ import requests
 class OperateXlsx:
     def __init__(self):
 
-        self.xlsx_address = '算法挖掘数据样本9-王二-00-00.xlsx'
+        self.xlsx_address = r'C:\Users\温柔的小茶花\Desktop\样本9\算法挖掘数据样本9-王二-00-00.xlsx'
         self.sheet_name = '王二'
         self.poi_id_column = 'a'
         self.poi_name_column = 'b'

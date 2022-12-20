@@ -5,7 +5,7 @@ import openpyxl
 # xlsx基础操作
 class OperateXlsx:
     def __init__(self):
-        self.xlsx_address = '算法挖掘数据样本9-王二-00-00.xlsx'
+        self.xlsx_address = r'C:\Users\温柔的小茶花\Desktop\样本9\算法挖掘数据样本9-王二-00-00.xlsx'
         self.sheet_name = '王二'
         self.poi_id_column = 'a'
         self.poi_name_column = 'b'
@@ -62,7 +62,7 @@ with sync_playwright() as p:
     # 创建一个浏览器实例
     browser = p.chromium.launch(headless=False)
     # 创建含登录状态的浏览器上下文
-    context = browser.new_context(viewport={'width': 1920, 'height': 1080})
+    context = browser.new_context(viewport={'width': 1440, 'height': 900})
 
     # 创建一个page对象
     page = context.new_page()
