@@ -107,8 +107,7 @@ with sync_playwright() as p:
             # 2/ 在画图工具中产生输出信息----------------------------------
             output_information = draw_pic(input_information)
             a.write_correct_reference(row_num_1, output_information)  # 3/ 把输出信息写入到表格中
-            row_num_1 += 1
         except:
-            row_num_1 += 1
             # 创建一个page对象
             page = context.new_page()
+        row_num_1 += 1
